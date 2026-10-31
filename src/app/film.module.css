@@ -1,0 +1,29 @@
+/* The app itself, seen: its film, at 16:9. Hairlines and paper as everywhere; the controls stay under the picture. */
+.film { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.frame { position: relative; overflow: hidden; border: 1px solid var(--line-2); border-radius: 16px; background: var(--surface); }
+.frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; cursor: pointer; background: var(--surface); }
+
+
+/* Play, until it plays. */
+.big {
+  position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; display: inline-flex;
+  align-items: center; justify-content: center; border: 0; border-radius: 50%; background: var(--accent); color: #fff;
+  cursor: pointer; transition: transform 0.25s var(--fall);
+}
+.big svg { margin-left: 3px; }
+.big:hover { transform: scale(1.06); }
+
+/* Under the picture: what it is, and sound, from the start, full screen. */
+.under { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.controls { flex-shrink: 0; display: flex; gap: 6px; }
+.controls button {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; min-width: 36px; padding: 0 10px; justify-content: center;
+  border: 1px solid var(--line-2); border-radius: 999px; background: var(--paper);
+  color: var(--ink); font-size: 12.5px; cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.controls button:hover { border-color: var(--accent); color: var(--accent); }
+.controls button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--tint); }
+.controls button:not(:first-child) span { display: none; }
+
+.caption { padding-top: 7px; font-size: 12.5px; line-height: 1.7; color: var(--muted); }
+

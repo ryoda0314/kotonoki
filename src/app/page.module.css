@@ -1,0 +1,223 @@
+/* One page: the first screen (the words and the tree that draws itself), 診断, the apps, what they share, the one
+   account, where they came from. Phone first; from 720 px two columns of apps, from 960 px the tree beside the words
+   and three. Things arrive as in the apps: they fall a little way into their place. */
+.page { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+/* ---- The bar, which stays at the top ----------------------------------------------------------------------------- */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
+.barIn { max-width: 1080px; margin: 0 auto; padding: 0 20px; min-height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: inline-flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.brandName { font-size: 23px; }
+.brandKanji { font-size: 13px; color: var(--muted); letter-spacing: 0.08em; }
+.nav { display: none; }
+.nav a { position: relative; font-size: 14px; color: var(--muted); text-decoration: none; padding: 10px 2px; }
+.nav a::after {
+  content: ""; position: absolute; left: 2px; right: 2px; bottom: 4px; height: 1.5px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--fall);
+}
+.nav a:hover { color: var(--accent); }
+.nav a:hover::after { transform: scaleX(1); }
+
+/* ---- The first screen -------------------------------------------------------------------------------------------- */
+.hero { display: grid; grid-template-areas: "lead" "scene" "text"; gap: 24px; padding: 32px 0 56px; }
+.lead { grid-area: lead; margin: 0; font-size: 28px; font-weight: 600; line-height: 1.45; letter-spacing: -0.01em; }
+.lead span { display: inline-block; animation: fall 0.6s var(--fall) both; animation-delay: calc(80ms + var(--i) * 90ms); }
+.sceneArea { grid-area: scene; display: flex; justify-content: center; }
+.heroText { grid-area: text; display: flex; flex-direction: column; gap: 20px; }
+.heroText > * { animation: fall 0.6s var(--fall) both; animation-delay: calc(520ms + var(--i) * 110ms); }
+.quote { margin: 0; padding: 12px 0 12px 16px; border-left: 2px solid var(--line-2); display: flex; flex-direction: column; gap: 4px; }
+.quote p { margin: 0; font-family: var(--font-mincho); font-weight: 700; font-size: 16px; line-height: 1.8; letter-spacing: 0.04em; color: var(--ink-2); }
+.quote cite { font-style: normal; font-size: 12.5px; color: var(--muted); }
+.body { margin: 0; font-size: 16px; line-height: 1.9; color: var(--ink-2); }
+/* On a phone the two share the row; with room, each its own width. */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.actions > a { flex: 1 1 0; min-width: 0; padding: 0 16px; white-space: nowrap; }
+/* To 診断: beside the way to the apps, quieter, and as tall. */
+.startQuiz { min-height: 52px; font-size: 16px; }
+.down { display: inline-flex; transform: rotate(90deg); transition: transform 0.3s var(--fall); }
+.start:hover .down, .startQuiz:hover .down { transform: rotate(90deg) translateX(3px); }
+
+@keyframes fall { from { opacity: 0; transform: translateY(-18px); } }
+
+/* ---- Sections ---------------------------------------------------------------------------------------------------- */
+.section { padding: 48px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 20px; }
+.head { display: flex; flex-direction: column; gap: 6px; }
+.h2 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: -0.01em; }
+.sectionLead { margin: 0; font-size: 15px; line-height: 1.8; color: var(--muted); }
+
+/* What every app shares, numbered in the wordmark's mincho. */
+.principles { list-style: none; margin: 0; padding: 0; display: grid; }
+.principles li { position: relative; padding: 18px 0 18px 44px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.principles li:last-child { border-bottom: 1px solid var(--line); }
+.numeral { position: absolute; left: 2px; top: 15px; font-family: var(--font-mincho); font-weight: 700; font-size: 20px; color: var(--accent); }
+.principles h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.principles p { margin: 0; font-size: 14.5px; line-height: 1.8; color: var(--ink-2); }
+
+/* One account: ことのあめ's, its lines drawn to the apps that take it. */
+.wires { display: block; width: 100%; max-width: 320px; height: auto; margin: 4px 0; }
+.wire { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; opacity: 0.55; }
+[data-waiting] > .wire { stroke-dashoffset: 1; }
+[data-waiting][data-shown] > .wire { stroke-dashoffset: 0; transition: stroke-dashoffset 0.8s var(--fall) calc(0.25s + var(--i) * 0.12s); }
+.text { margin: 0; font-size: 15.5px; line-height: 1.9; color: var(--ink-2); }
+.textLink { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 15px; color: var(--accent); text-underline-offset: 0.25em; }
+.textLink svg { transition: transform 0.3s var(--fall); }
+.textLink:hover svg { transform: translateX(3px); }
+
+/* Where they came from: the maker's own words. */
+.pull { margin: 4px 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pull p { margin: 0; font-family: var(--font-mincho); font-weight: 700; font-size: 19px; line-height: 1.75; letter-spacing: 0.03em; color: var(--ink); }
+.pull p::before { content: "「"; margin-left: -0.5em; color: var(--accent); }
+.pull p::after { content: "」"; color: var(--accent); }
+.pull cite { font-style: normal; font-size: 12.5px; color: var(--muted); }
+
+/* ---- 診断 (Quiz.tsx) --------------------------------------------------------------------------------------------- */
+/* One question at a time, numbered in the wordmark's mincho, its answers as wide plain buttons. */
+.quiz { display: flex; flex-direction: column; }
+.step { display: flex; flex-direction: column; gap: 14px; animation: fall 0.5s var(--fall) both; }
+.stepNumeral { margin: 0; font-family: var(--font-mincho); font-weight: 700; font-size: 20px; line-height: 1; color: var(--accent); }
+.question { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.55; }
+.question:focus, .found h3:focus { outline: none; }
+.choices { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.choices li { animation: fall 0.5s var(--fall) both; animation-delay: calc(90ms + var(--i) * 70ms); }
+.choice {
+  width: 100%; min-height: 56px; padding: 12px 16px 12px 18px; display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--paper); color: var(--ink);
+  font-size: 15.5px; line-height: 1.6; text-align: left; cursor: pointer; transition: border-color 0.2s, color 0.2s;
+}
+.choice svg { flex-shrink: 0; color: var(--faint); transition: transform 0.3s var(--fall), color 0.2s; }
+.choice:hover { border-color: var(--accent); color: var(--accent); }
+.choice:hover svg { color: var(--accent); transform: translateX(3px); }
+.quizBack {
+  align-self: flex-start; margin-top: 2px; padding: 8px 2px; border: 0; background: none; font-size: 14px; color: var(--muted);
+  text-decoration: underline; text-underline-offset: 0.25em; cursor: pointer;
+}
+.quizBack:hover { color: var(--accent); }
+/* The answer: the app in its own words, the way to it, and a sister to go with it. */
+.answered { margin: 0; font-size: 14px; line-height: 1.7; color: var(--muted); }
+.found { display: flex; align-items: center; gap: 14px; }
+.found img { flex-shrink: 0; display: block; width: 72px; height: 72px; }
+.found h3 { margin: 0; font-size: 30px; line-height: 1.3; }
+.foundLead { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.5; letter-spacing: -0.01em; }
+.foundAbout { margin: 0; font-size: 15.5px; line-height: 1.9; color: var(--ink-2); }
+.foundStart { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--muted); }
+.ways { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 4px; }
+.ways .appOpen, .ways .appSoon, .ways .textLink { align-self: auto; }
+.also {
+  display: flex; align-items: center; gap: 14px; margin-top: 8px; padding: 14px 0; border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line); color: var(--ink-2); text-decoration: none;
+}
+.also img { flex-shrink: 0; display: block; transition: transform 0.3s var(--fall); }
+.also > svg { flex-shrink: 0; color: var(--faint); transition: transform 0.3s var(--fall), color 0.2s; }
+.alsoText { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 1.75; }
+.alsoHead { display: flex; align-items: baseline; gap: 10px; }
+.alsoHead small { font-size: 12px; font-weight: 600; color: var(--muted); }
+.alsoHead b { font-size: 16px; color: var(--ink); }
+.also:hover img { transform: translateY(-2px); }
+.also:hover > svg { color: var(--accent); transform: translateX(3px); }
+.also:hover .alsoHead b { color: var(--accent); }
+
+/* Two short sections, side by side where there is room. */
+.pair { display: grid; }
+
+/* ---- Footer ------------------------------------------------------------------------------------------------------ */
+.footer { padding: 32px 0 48px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 16px; }
+.footerApps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 20px; }
+.footerApps a { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); text-decoration: none; }
+.footerApps img { display: block; transition: transform 0.3s var(--fall); }
+.footerApps a:hover { color: var(--accent); }
+.footerApps a:hover img { transform: translateY(-2px); }
+.footerSoon { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+.footerSoon small { font-size: 12px; color: var(--faint); }
+
+/* ---- The apps (AppSection.tsx, AppIndex.tsx) -------------------------------------------------------------------- */
+.apps { padding: 48px 0 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; }
+.apps > .head { padding-bottom: 20px; }
+
+/* The apps under the bar while they go by; the one being read is marked, and on a phone only its name shows. */
+.index { position: sticky; top: 61px; z-index: 15; background: var(--paper); border-bottom: 1px solid var(--line); }
+.index ul { list-style: none; margin: 0 -6px; padding: 0; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.index a {
+  position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 7px;
+  color: var(--muted); text-decoration: none; white-space: nowrap; font-size: 13px; transition: color 0.25s;
+}
+.index a::after {
+  content: ""; position: absolute; left: 6px; right: 6px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--accent);
+  transform: scaleX(0); transition: transform 0.35s var(--fall);
+}
+.index a[aria-current] { color: var(--ink); }
+.index a[aria-current]::after { transform: scaleX(1); }
+.index a:hover { color: var(--accent); }
+.index img { display: block; transition: transform 0.3s var(--fall); }
+.index a:hover img, .index a[aria-current] img { transform: translateY(-2px); }
+.index a span { display: none; }
+.index a[aria-current] span { display: inline; }
+
+/* One app: its head, first line, film, words, and the way to it; on a phone in that order. */
+.app {
+  display: grid; grid-template-areas: "head" "lead" "media" "body" "side"; gap: 18px; padding: 48px 0 56px;
+  border-bottom: 1px solid var(--line); scroll-margin-top: 48px;
+}
+.app:last-child { border-bottom: 0; }
+.appHead { grid-area: head; display: flex; align-items: center; gap: 14px; }
+.appHead img { flex-shrink: 0; display: block; width: 64px; height: 64px; }
+.appName { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.appName h3 { margin: 0; font-size: 26px; line-height: 1.3; }
+.appKanji { margin: 0; font-size: 12.5px; color: var(--muted); }
+.appKanji b { margin-right: 6px; font-family: var(--font-mincho); font-weight: 700; font-size: 14px; color: var(--accent); }
+.appLead { grid-area: lead; margin: 0; font-size: 22px; font-weight: 600; line-height: 1.5; letter-spacing: -0.01em; }
+.appMedia { grid-area: media; }
+.appBody { grid-area: body; display: flex; flex-direction: column; gap: 12px; }
+.appBody > p { margin: 0; font-size: 15.5px; line-height: 1.95; color: var(--ink-2); }
+.appSide { grid-area: side; display: flex; flex-direction: column; gap: 18px; }
+.facts { margin: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+.facts > div { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.facts dt { font-size: 12.5px; font-weight: 600; color: var(--muted); padding-top: 1px; }
+.facts dd { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; line-height: 1.75; color: var(--ink-2); }
+.lang { padding: 1px 10px; border-radius: 999px; background: var(--surface); color: var(--ink-2); font-size: 12.5px; }
+.appOpen { align-self: flex-start; min-width: 220px; }
+.appOpen svg { transition: transform 0.3s var(--fall); }
+.appOpen:hover svg { transform: translateX(3px); }
+/* Not out yet: said in the button's place, quietly, and not a way anywhere. */
+.appSoon {
+  align-self: flex-start; min-width: 220px; min-height: 52px; margin: 0; padding: 0 24px; display: inline-flex;
+  align-items: center; justify-content: center; border: 1px solid var(--line-2); border-radius: var(--radius);
+  font-size: 15px; font-weight: 500; color: var(--muted);
+}
+/* No film yet: the words follow the first line. */
+.appNoFilm { grid-template-areas: "head" "lead" "body" "side"; }
+/* Arrived at from the tree above or the apps under the bar: a moment of tint behind its name. */
+.app:target .appHead { animation: arrive 1.8s ease-out both; border-radius: 16px; }
+@keyframes arrive { from { background: var(--tint); } }
+
+@media (min-width: 720px) {
+  .nav { display: flex; gap: 22px; }
+  .actions > a { flex: 0 0 auto; padding: 0 24px; }
+  .actions > .start { min-width: 200px; }
+  .actions > .startQuiz { min-width: 160px; }
+  .lead { font-size: 36px; }
+  .index a span { display: inline; }
+  .apps { padding-top: 72px; }
+  .appLead { font-size: 26px; }
+  .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+  .principles li:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+  .section { padding: 72px 0; }
+}
+@media (min-width: 960px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 460px); grid-template-areas: "lead scene" "text scene";
+    column-gap: 64px; row-gap: 28px; padding: 56px 0 80px;
+  }
+  .lead { align-self: end; font-size: 40px; }
+  .heroText { align-self: start; }
+  /* The film runs the width; under it, the words, and beside them what it teaches and the way to it. */
+  .app {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 340px); grid-template-areas: "head head" "lead lead" "media media" "body side";
+    column-gap: 56px; row-gap: 22px; padding: 72px 0;
+  }
+  .appMedia { margin: 8px 0 14px; }
+  .appNoFilm { grid-template-areas: "head head" "lead lead" "body side"; }
+  .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; border-top: 1px solid var(--line); }
+  /* 診断: what it is on the left, the questions beside it. */
+  .quizSection { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 580px); column-gap: 64px; align-items: start; }
+  .pair > .section { border-top: 0; }
+}

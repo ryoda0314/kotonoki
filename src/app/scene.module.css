@@ -1,0 +1,67 @@
+/* The first picture. Its resting state is the finished tree: every animation only says where a thing comes from
+   (`both`), so with reduced motion (globals.css) the tree is simply there. The words keep falling, slowly, and stop
+   while the picture is out of view (data-still, set by Motion.tsx). */
+.scene { margin: 0; width: 100%; max-width: 460px; justify-self: center; display: flex; flex-direction: column; gap: 8px; }
+.svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* Lines draw themselves from where they start: the ground, the trunk, its shadow, a branch, the fruit's stem, the
+   roots. */
+.line {
+  fill: none; stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 1;
+  animation: draw var(--t, 0.8s) cubic-bezier(0.33, 0, 0.2, 1) var(--at, 0s) both;
+}
+.root { stroke-width: 1.2; opacity: 0.55; }
+/* The tree's shadow: a soft band along the ground, a little behind the trunk (never a drop shadow). */
+.shadow { stroke-width: 3.2; opacity: 0.2; }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+/* Each app falls into its place, as lines fall in in the apps, then sways a little, each at its own pace (the shadow
+   at the leaves', a beat behind them: Scene.tsx). */
+.node {
+  text-decoration: none;
+  animation: fall 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) var(--at, 0s) both, sway var(--sway, 5s) ease-in-out var(--sway-at, 0s) infinite;
+}
+@keyframes sway { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
+.node:focus { outline: none; }
+.focus { fill: none; stroke: transparent; stroke-width: 2; }
+.node:focus-visible .focus { stroke: var(--accent); }
+.pic { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.node:hover .pic { transform: translateY(-4px); }
+.label { font-family: var(--font-mincho); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; fill: var(--ink); }
+.part { fill: var(--accent); }
+.node:hover .label { fill: var(--accent); }
+@keyframes fall { from { opacity: 0; transform: translateY(-18px); } }
+
+/* The leaves' voice: rings that spread towards ことのおと, one after another. */
+.ring {
+  fill: none; stroke: var(--again); stroke-width: 1.7; stroke-linecap: round; opacity: 0.45;
+  transform-origin: 200px 194px; animation: ring 2.4s ease-out var(--at, 0s) infinite both;
+}
+@keyframes ring {
+  0% { opacity: 0; transform: scale(0.85); }
+  25% { opacity: 0.85; }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
+/* 言の雨: the apps' own words, each falling from the cloud once a round (about four seconds of the round's fourteen)
+   and gone before the crown, the next a second behind it. */
+.drop {
+  font-family: var(--font-ui); font-size: 12.5px; font-weight: 500; opacity: 0;
+  animation: rain var(--cycle, 14s) linear var(--at, 0s) infinite both;
+}
+/* When nothing moves, a few words rest where they fell, none over another. */
+.rest { opacity: 0.55; }
+.tone0 { fill: var(--accent); }
+.tone1 { fill: var(--again); }
+.tone2 { fill: var(--ink-2); }
+@keyframes rain {
+  0% { opacity: 0; transform: translateY(var(--from)); }
+  4% { opacity: 1; }
+  22% { opacity: 0.85; }
+  28% { opacity: 0; transform: translateY(var(--to)); }
+  100% { opacity: 0; transform: translateY(var(--to)); }
+}
+
+.scene[data-still] .drop, .scene[data-still] .ring { animation-play-state: paused; }
+
+.caption { margin: 0; padding: 0 4px; font-size: 13.5px; line-height: 1.85; color: var(--muted); text-align: center; }

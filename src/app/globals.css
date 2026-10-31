@@ -1,0 +1,92 @@
+/* ことのき: the sisters' paper, ink and one accent (ことのあめ's, from its icon), so the apps and the page that
+   gathers them look like one family. No gradients or shadows; hairlines separate. The apps' own icons are the only
+   pictures with gradients, as in the apps. */
+:root {
+  --paper: #fcfbf8;
+  --surface: #f1f4f8;
+  --ink: #172033;
+  --ink-2: #3b4558;
+  --muted: #5c6578;
+  --faint: #8c94a5;
+  --line: #e4e7ec;
+  --line-2: #d4d9e1;
+
+  --accent: #0a64f0;
+  --tint: #e6f0ff;
+  /* What comes back, as in the apps: here the voice of the leaves and some of the falling words. */
+  --again: #6a4fe0;
+  --again-tint: #efebff;
+
+  /* The apps' way of arriving: a thing falls a little way into its place. */
+  --fall: cubic-bezier(0.2, 0.8, 0.3, 1);
+
+  --radius: 12px;
+  --tap: 44px;
+
+  --font-ui: var(--font-plex), var(--font-plex-jp), "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-ja: var(--font-plex-jp), "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-en: var(--font-plex), "Helvetica Neue", sans-serif;
+  --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", "Yu Mincho", serif;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+/* Room for the bar that stays at the top when a link scrolls to a place on the page. */
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Japanese wraps between phrases, and a paragraph does not end on a lone word (as in the apps). */
+  word-break: auto-phrase;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3 { text-wrap: balance; }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 0 24px; border-radius: var(--radius);
+  border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.btn-quiet {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 18px; border-radius: var(--radius);
+  border: 1px solid var(--line-2); background: var(--paper); color: var(--ink);
+  font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer;
+}
+.btn-quiet:hover { border-color: var(--accent); color: var(--accent); }
+.btn-quiet[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--tint); }
+
+/* The names in mincho, as each app's wordmark. */
+.wordmark-kana { font-family: var(--font-mincho); font-weight: 700; letter-spacing: 0.06em; }
+
+.t-en { font-family: var(--font-en); }
+
+/* Further down, things fall into place as they come into view (Motion.tsx marks what is still to come). */
+[data-waiting] { opacity: 0; transform: translateY(-18px); }
+[data-waiting][data-shown] {
+  opacity: 1; transform: none;
+  transition: opacity 0.55s ease-out, transform 0.55s var(--fall);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
